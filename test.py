@@ -2,16 +2,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# --------------- Data ---------------------
 rows = 5
+data = pd.read_csv("used_cars.csv", nrows=rows)
 
-a = pd.read_csv("used_cars.csv", nrows=rows)
-print(a)
-
-brand = pd.read_csv("used_cars.csv", nrows=rows, usecols=[0])
-# print(brand)
-model = pd.read_csv("used_cars.csv", nrows=rows, usecols=[1])
-model_year = pd.read_csv("used_cars.csv", nrows=rows, usecols=[2])
-mile = pd.read_csv("used_cars.csv", nrows=rows, usecols=[3])
-
-price = pd.read_csv("used_cars.csv", nrows=rows, usecols=[11])
-print(price)
+model_year_data = data['model_year'].astype(int)
+milage_data = data['milage'].str.replace(' mi.', '').str.replace(',','').astype(int)
+accident_data = data['accident'].str.replace('At least 1 accident or damage reported', '1').str.replace('None reported', '0').astype(int)
+price_data = data['price'].str.replace('$', '').str.replace(',','').astype(int)
