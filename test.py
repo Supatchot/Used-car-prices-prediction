@@ -10,3 +10,6 @@ model_year_data = data['model_year'].astype(int)
 milage_data = data['milage'].str.replace(' mi.', '').str.replace(',','').astype(int)
 accident_data = data['accident'].str.replace('At least 1 accident or damage reported', '1').str.replace('None reported', '0').astype(int)
 price_data = data['price'].str.replace('$', '').str.replace(',','').astype(int)
+
+plt.scatter(model_year_data, price_data)
+plt.show()
