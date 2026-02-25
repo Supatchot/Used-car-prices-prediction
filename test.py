@@ -2,14 +2,21 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# -------------Function------------------
+# --------------- Variables ---------------------
+rows = 100
+degrees = 4
+data = pd.read_csv("used_cars.csv", nrows=rows)
+
+# ------------- Functions ------------------
 def normalize(x):
     res = (x - np.mean(x)) / np.std(x)
     return res
 
-# --------------- Data ---------------------
-rows = 100
-data = pd.read_csv("used_cars.csv", nrows=rows)
+def polyMatrix(x, degrees = degrees):
+    mat_x = np.ones_like(x)
+    for i in range(1, degrees+1):
+        mat_x = np.concatenate((mat_x, x**i), axis=1)
+    return mat_x
 
 # ---------- Data cleaning ---------------
 model_year_data = data['model_year'].astype(int)
@@ -33,7 +40,7 @@ y_price_z = normalize(y_price)
 y_z = y_price_z.reshape(-1, 1)
 
 ones = np.ones_like(x_year_z.reshape(-1,1))
-mat_x = np.concatenate((ones, x_year_z.reshape(-1,1), x_year_z.reshape(-1,1)**2), axis=1)
+mat_x = polyMatrix(x_year_z.reshape(-1,1))
 
 first_term = np.linalg.inv(mat_x.T @ mat_x)
 sec_term = mat_x.T @ y_z
@@ -43,14 +50,26 @@ result = result.flatten()
 print(result)
 x_year_z = np.sort(x_year_z)
 plt.plot(x_year_z, y_z, 'bo')
-plt.plot(x_year_z, result[0] + result[1]*x_year_z + result[2]*(x_year_z**2), '-r')
+
+d = 1
+i = 1
+y_result = 0
+for i in range(1, degrees + 1):
+    y_result = y_result + result[d]*(x_year_z**i)
+    d += 1
+y_result += result[0]
+
+plt.plot(x_year_z, y_result, '-r')
 plt.show()
 
 # -------------- Input ----------------
 year = int(input("Enter the year: "))
 year_normalized = float((year - np.mean(x_year)) / np.std(x_year))
 
-x_input = np.array([1, year_normalized, year_normalized**2])
+x_input = np.array([1])
+for i in range(1, degrees+1):
+    x_input = np.append(x_input, year_normalized**i)
+
 price_normalized = x_input @ result
 price = (price_normalized*np.std(y_price)) + np.mean(y_price)
 print(float(price))
