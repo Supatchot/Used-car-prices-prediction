@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # --------------- Variables ---------------------
-rows = 100
+rows = 50
 data = pd.read_csv("used_cars.csv", nrows=rows)
 
 # ------------- Functions ------------------
@@ -46,11 +46,29 @@ plt.plot(x_year_z, y_z, 'bo')
 plt.plot(x_year_z, result[0] + result[1]*(x_year_z), '-r')
 plt.show()
 
-# -------------- Input ----------------
-year = int(input("Enter the year: "))
-year_normalized = float((year - np.mean(x_year)) / np.std(x_year))
+# -------------- Weighted Regression -------------
+# Covariance Matrix
+p = 3
+residual = y_z - (mat_x @ result)
 
-x_input = np.array([1, year_normalized])
-price_normalized = x_input @ result
-price = (price_normalized*np.std(y_price)) + np.mean(y_price)
-print(float(price))
+sigma_sq = (residual.T @ residual) / (rows-p-1)
+covariance = sigma_sq @ np.identity(rows)
+covariance_inv = np.linalg.inv(covariance)
+
+first_term_2 = np.linalg.inv(mat_x.T @ covariance_inv @ mat_x)
+sec_term_2 = mat_x.T @ covariance_inv @ y_z
+coef = first_term_2 @ sec_term_2
+
+print(coef)
+plt.plot(x_year_z, y_z, 'bo')
+plt.plot(x_year_z, coef[0] + coef[1]*(x_year_z), '-r')
+plt.show()
+
+# -------------- Input ----------------
+# year = int(input("Enter the year: "))
+# year_normalized = float((year - np.mean(x_year)) / np.std(x_year))
+
+# x_input = np.array([1, year_normalized])
+# price_normalized = x_input @ result
+# price = (price_normalized*np.std(y_price)) + np.mean(y_price)
+# print(float(price))
