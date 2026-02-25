@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # --------------- Data ---------------------
-rows = 30
+rows = 100
 data = pd.read_csv("used_cars.csv", nrows=rows)
 
 # ------ Data cleaning ---------------
