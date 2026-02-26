@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # --------------- Variables ---------------------
 rows = 100
-degrees = 4
+degrees = 10
 data = pd.read_csv("used_cars.csv", nrows=rows)
 
 # ------------- Functions ------------------
@@ -72,4 +72,4 @@ for i in range(1, degrees+1):
 
 price_normalized = x_input @ result
 price = (price_normalized*np.std(y_price)) + np.mean(y_price)
-print(float(price))
+print(f"The car would costs: ${price}")
