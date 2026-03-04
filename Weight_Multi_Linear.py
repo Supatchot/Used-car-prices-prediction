@@ -7,8 +7,8 @@ rows = 100
 data = pd.read_csv("used_cars.csv", nrows=rows)
 
 # ------------- Functions ------------------
-def normalize(x):
-    res = (x - np.mean(x)) / np.std(x)
+def normalize(x, x_cal):
+    res = (x - np.mean(x_cal)) / np.std(x_cal)
     return res
 
 def acc(y):
@@ -59,16 +59,16 @@ y_price_test = np.array(price_test)
 
 # ---------- data normalization ------------
 # Train set
-x_year_z = normalize(x_year)
-x_milage_z = normalize(x_milage)
-x_accident_z = normalize(x_accident)
-y_price_z = normalize(y_price)
+x_year_z = normalize(x_year, x_year)
+x_milage_z = normalize(x_milage, x_milage)
+x_accident_z = normalize(x_accident, x_accident)
+y_price_z = normalize(y_price, y_price)
 
 # Test set
-x_year_test_z = (x_year_test - np.mean(x_year)) / np.std(x_year)
-x_milage_test_z = (x_milage_test - np.mean(x_milage)) / np.std(x_milage)
-x_accident_test_z = (x_accident_test - np.mean(x_accident)) / np.std(x_accident)
-y_price_test_z = (y_price_test - np.mean(y_price)) / np.std(y_price)
+x_year_test_z = normalize(x_year_test, x_year)
+x_milage_test_z = normalize(x_milage_test, x_milage)
+x_accident_test_z = normalize(x_accident_test, x_accident)
+y_price_test_z = normalize(y_price_test, y_price)
 
 # ------------ Regression -----------------
 y_z = y_price_z.reshape(-1, 1)
@@ -81,11 +81,8 @@ sec_term = mat_x.T @ y_z
 result = first_term @ sec_term
 result = result.flatten()
 
+print("---- Coefficient ----")
 print(f"coefficient of normal: {result}")
-# x_year_z = np.sort(x_year_z)
-# plt.plot(x_year_z, y_z, 'bo')
-# plt.plot(x_year_z, result[0] + result[1]*(x_year_z), '-r')
-# plt.show()
 
 # -------------- Weighted Regression -------------
 # Covariance Matrix
@@ -101,9 +98,6 @@ coef = first_term_2 @ sec_term_2
 coef = coef.flatten()
 
 print(f"coefficient of weighted: {coef}")
-# plt.plot(x_year_z, y_z, 'bo')
-# plt.plot(x_year_z, coef[0] + coef[1]*(x_year_z), '-r')
-# plt.show()
 
 # ----------- Accuracy Matrics ---------
 ones_test = np.ones(test_n)
@@ -120,11 +114,11 @@ acc(y_pred_weighted)
 # -------------- Input ----------------
 print("\n--- Car price prediction ---")
 year = int(input("Enter the year: "))
-year_normalized = float((year - np.mean(x_year)) / np.std(x_year))
+year_normalized = float(normalize(year, x_year))
 mile = int(input("Enter the milage: "))
-mile_normalized = float((mile - np.mean(x_milage)) / np.std(x_milage))
+mile_normalized = float(normalize(mile, x_milage))
 accident = int(input("Are you okay if the car has been in an accident (1 for okay, 0 for not okay): "))
-accident_normalized = float((accident - np.mean(x_accident)) / np.std(x_accident))
+accident_normalized = float(normalize(accident, x_accident))
 
 x_input = np.array([1, year_normalized, mile_normalized, accident_normalized])
 price_normalized = x_input @ coef
