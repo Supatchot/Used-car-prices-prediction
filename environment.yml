@@ -7,3 +7,6 @@ dependencies:
   - numpy
   - matplotlib
   - pandas
+  - scikit-learn
+  - tensorflow
+  - -q seaborn

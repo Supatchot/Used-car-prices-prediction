@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 # --------------- Variables ---------------------
 rows = 100
+test_n = 10
 data = pd.read_csv("used_cars.csv", nrows=rows)
 
 # ------------- Functions ------------------
@@ -22,7 +23,7 @@ def acc(y):
 
     num = y - y_price_test_z
     num = num.T @ num
-    denom = y_price_test_z - np.mean(y_price_z)
+    denom = y_price_test_z - np.mean(y_price_test_z)
     denom = denom.T @ denom
     r_sq = 1 - (num/denom)
     print(f"R_SQUARED: {r_sq}")
@@ -41,7 +42,6 @@ x_accident = np.array(accident_data)
 y_price = np.array(price_data)
 
 # Test set
-test_n = 10
 rows_test = rows + test_n
 test = pd.read_csv("used_cars.csv", nrows=rows_test)
 test = test.tail(test_n)
@@ -116,6 +116,7 @@ acc(y_pred)
 print("\n---- Accuracy Matrics for weighted ----")
 y_pred_weighted = mat_x_test @ coef
 acc(y_pred_weighted)
+# plt.plot(x_year_z, coef[0] + coef[1]*)
 
 # -------------- Input ----------------
 print("\n--- Car price prediction ---")
