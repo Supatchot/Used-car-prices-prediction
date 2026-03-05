@@ -6,8 +6,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 
 # --------------- Variables ---------------------
-rows = 180
-test_n = 20
+rows = 100
+test_n = 10
 data = pd.read_csv("used_cars.csv", nrows=rows)
 
 # ---------- Data cleaning ---------------
@@ -64,7 +64,6 @@ mlp = MLPRegressor(
 )
 
 mlp.fit(X_train_z, y_train_z)
-print(f"Training converged in {mlp.n_iter_} iterations")
 
 # ----------- Accuracy Metrics ---------
 def acc(y_pred_z):

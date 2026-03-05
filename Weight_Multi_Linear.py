@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # --------------- Variables ---------------------
-rows = 180
-test_n = 20
+rows = 100
+test_n = 10
 data = pd.read_csv("used_cars.csv", nrows=rows)
 
 # ------------- Functions ------------------
