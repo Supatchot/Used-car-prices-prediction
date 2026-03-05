@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # --------------- Variables ---------------------
-rows = 100
-test_n = 10
+rows = 180
+test_n = 20
 data = pd.read_csv("used_cars.csv", nrows=rows)
 
 # ------------- Functions ------------------
@@ -110,18 +110,33 @@ acc(y_pred)
 print("\n---- Accuracy Matrics for weighted ----")
 y_pred_weighted = mat_x_test @ coef
 acc(y_pred_weighted)
-# plt.plot(x_year_z, coef[0] + coef[1]*)
+
+# --------- Plot Graphs -----------
+x_year_z = np.sort(x_year_z)
+plt.plot(x_year_z, y_price_z, 'bo')
+plt.plot(x_year_z, coef[0] + coef[1]*x_year_z, 'r-')
+plt.show()
+
+x_milage_z = np.sort(x_milage_z)
+plt.plot(x_milage_z, y_price_z, 'bo')
+plt.plot(x_milage_z, coef[0] + coef[2]*x_milage_z, 'r-')
+plt.show()
+
+x_accident_z = np.sort(x_accident_z)
+plt.plot(x_accident_z, y_price_z, 'bo')
+plt.plot(x_accident_z, coef[0] + coef[3]*x_accident_z, 'r-')
+plt.show()
 
 # -------------- Input ----------------
-print("\n--- Car price prediction ---")
-year = int(input("Enter the year: "))
-year_normalized = float(normalize(year, x_year))
-mile = int(input("Enter the milage: "))
-mile_normalized = float(normalize(mile, x_milage))
-accident = int(input("Are you okay if the car has been in an accident (1 for okay, 0 for not okay): "))
-accident_normalized = float(normalize(accident, x_accident))
+# print("\n--- Car price prediction ---")
+# year = int(input("Enter the year: "))
+# year_normalized = float(normalize(year, x_year))
+# mile = int(input("Enter the milage: "))
+# mile_normalized = float(normalize(mile, x_milage))
+# accident = int(input("Are you okay if the car has been in an accident (1 for okay, 0 for not okay): "))
+# accident_normalized = float(normalize(accident, x_accident))
 
-x_input = np.array([1, year_normalized, mile_normalized, accident_normalized])
-price_normalized = x_input @ coef
-price = (price_normalized*np.std(y_price)) + np.mean(y_price)
-print(f"The car would costs: ${price}")
+# x_input = np.array([1, year_normalized, mile_normalized, accident_normalized])
+# price_normalized = x_input @ coef
+# price = (price_normalized*np.std(y_price)) + np.mean(y_price)
+# print(f"The car would costs: ${price}")
