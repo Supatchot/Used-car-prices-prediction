@@ -125,28 +125,23 @@ for idx, (plane, b, label, surf_color) in enumerate([
     ax = fig.add_subplot(1, 2, idx, projection='3d')
 
     # --- Regression surface ---
-    ax.plot_surface(year_grid, milage_grid, plane,
-                    alpha=0.35, color=surf_color, edgecolor='none')
+    ax.plot_surface(year_grid, milage_grid, plane, alpha=0.35, color=surf_color, edgecolor='none')
 
     # --- Train scatter ---
-    ax.scatter(x_year_z, x_milage_z, y_price_z,
-               c='blue', s=16, alpha=0.7, label='Train data', zorder=5)
+    ax.scatter(x_year_z, x_milage_z, y_price_z, c='blue', s=16, alpha=0.7, label='Train data', zorder=5)
 
     # --- Test scatter ---
-    ax.scatter(x_year_test_z, x_milage_test_z, y_price_test_z,
-               c='yellow', s=16, alpha=0.7, label='Test data', zorder=5)
+    ax.scatter(x_year_test_z, x_milage_test_z, y_price_test_z, c='yellow', s=16, alpha=0.7, label='Test data', zorder=5)
 
     # --- Residual lines for test points ---
     mat_x_test = np.column_stack([np.ones(test_n), x_year_test_z, x_milage_test_z])
     y_pred_test = mat_x_test @ b
-    for xyr, xmi, yact, ypred in zip(x_year_test_z, x_milage_test_z,
-                                      y_price_test_z, y_pred_test):
-        ax.plot([xyr, xyr], [xmi, xmi], [yact, ypred],
-                color='gray', linewidth=0.8, alpha=0.6)
+    for xyr, xmi, yact, ypred in zip(x_year_test_z, x_milage_test_z, y_price_test_z, y_pred_test):
+        ax.plot([xyr, xyr], [xmi, xmi], [yact, ypred], color='gray', linewidth=0.8, alpha=0.6)
 
     ax.set_xlabel("Model Year (z)", labelpad=8)
-    ax.set_ylabel("Mileage (z)",    labelpad=8)
-    ax.set_zlabel("Price (z)",      labelpad=8)
+    ax.set_ylabel("Mileage (z)", labelpad=8)
+    ax.set_zlabel("Price (z)", labelpad=8)
     ax.set_title(label, fontsize=12, pad=10)
     ax.legend(loc='upper left', fontsize=8)
     ax.view_init(elev=22, azim=-50)
